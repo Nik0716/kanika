@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tumblr-Inspired Microblog</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>TumbloClone</h1>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search tags..." id="search-input">
+            </div>
+            <div class="nav-links">
+                <a href="#">Dashboard</a>
+                <a href="#">Explore</a>
+                <a href="#">Messages <span id="message-counter">2</span></a>
+                <a href="#">Notifications <span id="notification-counter">5</span></a>
+                <button id="dark-mode-toggle">🌙 Dark Mode</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="post-creation">
+            <form id="post-form">
+                <div class="user-info">
+                    <img src="default-avatar.png" alt="Profile Picture" class="profile-pic">
+                    <input type="text" id="username" placeholder="Your Name" required>
+                </div>
+                <textarea id="post-content" placeholder="Share a thought..." required></textarea>
+                
+                <!-- Image Upload Input -->
+                <label for="post-image">Upload Image:</label>
+                <input type="file" id="post-image" accept="image/*">
+
+                <button type="submit">Post</button>
+            </form>
+        </section>
+
+        <section class="posts-feed">
+            <h2>Trending Posts</h2>
+            <div id="posts-list" class="grid-layout"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TumbloClone</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
+
+<style>
+/* General Reset and Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dark-mode {
+    background-color: #181818;
+    color: #f5f5f5;
+}
+
+/* Navbar */
+header {
+    background: #35465c;
+    padding: 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .search-bar input {
+    padding: 8px;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+}
+
+.nav-links a {
+    margin-left: 15px;
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+}
+
+.nav-links a span {
+    background: red;
+    border-radius: 50%;
+    padding: 3px 7px;
+    font-size: 12px;
+    color: white;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+}
+
+#dark-mode-toggle {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+/* Post Creation */
+.post-creation {
+    background: #fff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.post-creation .user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post-creation .profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Grid layout for posts */
+
+/* Make posts display one after another in a vertical line */
+.grid-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+
+.post {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.post .post-info {
+    display: flex;
+    align-items: center;
+}
+
+.post .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Style for uploaded images in posts */
+.post img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+} 
+
+
+.post .post-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.post button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.post button:hover {
+    color: #0056b3;
+}
+
+.dark-mode .post {
+    background: #333;
+}
+
+.dark-mode .post img {
+    border: 1px solid #fff;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #35465c;
+    color: #ffffff;
+    margin-top: 20px;
+}
+
+.dark-mode footer {
+    background-color: #333;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .post-creation, .grid-layout {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .nav-links a {
+        font-size: 0.9em;
+    }
+}
+
+
+<script>
+const postForm = document.getElementById('post-form');
+const usernameInput = document.getElementById('username');
+const postContent = document.getElementById('post-content');
+const postsList = document.getElementById('posts-list');
+const postImageInput = document.getElementById('post-image');
+const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+// Load posts (Dummy Data for now)
+async function loadPosts() {
+    const posts = [
+        { id: 1, username: "User1", content: "First Tumblr-like post with an image!", createdAt: Date.now(), likes: 10, imageUrl: "https://via.placeholder.com/400" },
+        { id: 2, username: "User2", content: "Here's a second post, no image.", createdAt: Date.now(), likes: 5 },
+        { id: 3, username: "User3", content: "Check out this image post!", createdAt: Date.now(), likes: 8, imageUrl: "https://via.placeholder.com/300" },
+        { id: 4, username: "User4", content: "Another post with a cool image.", createdAt: Date.now(), likes: 12, imageUrl: "https://via.placeholder.com/450" },
+    ];
+
+    posts.forEach(post => {
+        displayPost(post);
+    });
+}
+
+// Display post in the feed
+function displayPost(post) {
+    const postDiv = document.createElement('div');
+    postDiv.classList.add('post');
+    postDiv.innerHTML = `
+        <div class="post-info">
+            <img src="default-avatar.png" alt="Profile Picture" class="profile-pic">
+            <p><strong>${post.username}</strong>: ${post.content}</p>
+        </div>
+        <small>${new Date(post.createdAt).toLocaleString()}</small>
+        ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Post Image">` : ''}
+        <div class="post-buttons">
+            <button onclick="likePost(${post.id})">❤️ Like (${post.likes || 0})</button>
+            <button onclick="reblogPost(${post.id})">🔄 Reblog</button>
+        </div>
+    `;
+    postsList.append(postDiv);
+}
+
+// Dark Mode Toggle
+darkModeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
+
+// Add a new post
+postForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = usernameInput.value;
+    const content = postContent.value;
+    let imageUrl = '';
+
+    // Handle Image Upload
+    if (postImageInput.files.length > 0) {
+        const file = postImageInput.files[0];
+        imageUrl = URL.createObjectURL(file);  // Create a local URL for the uploaded image
+    }
+
+    const post = { username, content, createdAt: Date.now(), likes: 0, imageUrl };
+    displayPost(post);
+
+    // Reset form
+    postContent.value = '';
+    usernameInput.value = '';
+    postImageInput.value = '';  // Reset the image input
+});
+
+// Like Post
+function likePost(id) {
+    // Dummy increment like logic
+    alert(`Post ${id} liked!`);
+}
+
+// Reblog Post
+function reblogPost(id) {
+    alert(`Post ${id} reblogged!`);
+}
+
+// Load all posts on page load
+loadPosts();
