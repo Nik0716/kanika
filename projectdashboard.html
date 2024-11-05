@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Project Dashboard</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            display: flex;
+            justify-content: center;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+        .app {
+            width: 90%;
+            max-width: 900px;
+            color: inherit;
+            background: #29293d;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dark-mode-toggle {
+            cursor: pointer;
+            color: #f5f5f5;
+            padding: 5px;
+        }
+        .add-list input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: none;
+            outline: none;
+        }
+        .add-list button {
+            width: 100%;
+            padding: 10px;
+            background-color: #6a5acd;
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .add-list button:hover {
+            background-color: #8470ff;
+        }
+        .lists {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .list {
+            background-color: #3e3e54;
+            border-radius: 8px;
+            padding: 20px;
+            width: 240px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .list-header button {
+            background: transparent;
+            color: #f05454;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+        }
+        .list-header h2 {
+            font-size: 1.2em;
+            color: #f5f5f5;
+            margin: 0;
+        }
+        .card-form input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+        .card-form button {
+            width: 100%;
+            padding: 8px;
+            background-color: #4caf50;
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .card-form button:hover {
+            background-color: #66bb6a;
+        }
+        .cards .card {
+            background-color: #4e4e6a;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            color: #ffffff;
+        }
+        .cards .card h3 {
+            margin: 0 0 5px 0;
+        }
+        .cards .card p {
+            margin: 0;
+            color: #b0b0b0;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // App Component
+        const App = () => {
+            const [lists, setLists] = React.useState([]);
+            const [listTitle, setListTitle] = React.useState('');
+            const [darkMode, setDarkMode] = React.useState(true);
+
+            const handleAddList = () => {
+                if (listTitle.trim()) {
+                    setLists([...lists, { title: listTitle, cards: [] }]);
+                    setListTitle('');
+                }
+            };
+
+            const toggleDarkMode = () => {
+                setDarkMode(!darkMode);
+                document.body.style.backgroundColor = darkMode ? '#e0e0e0' : '#1e1e2f';
+                document.body.style.color = darkMode ? '#333' : '#e0e0e0';
+            };
+
+            return (
+                <div className="app" style={{ color: darkMode ? "#e0e0e0" : "#333" }}>
+                    <div className="controls">
+                        <h1>Project Dashboard</h1>
+                        <button className="dark-mode-toggle" onClick={toggleDarkMode}>
+                            {darkMode ? "Light Mode" : "Dark Mode"}
+                        </button>
+                    </div>
+                    <div className="add-list">
+                        <input
+                            type="text"
+                            value={listTitle}
+                            onChange={(e) => setListTitle(e.target.value)}
+                            placeholder="Enter list title"
+                        />
+                        <button onClick={handleAddList}>Add List</button>
+                    </div>
+                    <div className="lists">
+                        {lists.map((list, index) => (
+                            <List key={index} list={list} lists={lists} setLists={setLists} index={index} />
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        // List Component
+        const List = ({ list, lists, setLists, index }) => {
+            const [cardTitle, setCardTitle] = React.useState('');
+            const [cardText, setCardText] = React.useState('');
+
+            const handleAddCard = () => {
+                if (cardTitle.trim() && cardText.trim()) {
+                    const newCard = { title: cardTitle, text: cardText };
+                    const updatedLists = [...lists];
+                    updatedLists[index].cards.push(newCard);
+                    setLists(updatedLists);
+                    setCardTitle('');
+                    setCardText('');
+                }
+            };
+
+            const handleDeleteList = () => {
+                if (confirm("Are you sure you want to delete this list?")) {
+                    const updatedLists = lists.filter((_, i) => i !== index);
+                    setLists(updatedLists);
+                }
+            };
+
+            return (
+                <div className="list">
+                    <div className="list-header">
+                        <h2>{list.title}</h2>
+                        <button onClick={handleDeleteList}>X</button>
+                    </div>
+                    <div className="card-form">
+                        <input
+                            type="text"
+                            value={cardTitle}
+                            onChange={(e) => setCardTitle(e.target.value)}
+                            placeholder="Enter Title"
+                        />
+                        <input
+                            type="text"
+                            value={cardText}
+                            onChange={(e) => setCardText(e.target.value)}
+                            placeholder="Enter the text for this card"
+                        />
+                        <button onClick={handleAddCard}>Add Card</button>
+                    </div>
+                    <div className="cards">
+                        {list.cards.map((card, cardIndex) => (
+                            <Card key={cardIndex} card={card} />
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        // Card Component
+        const Card = ({ card }) => (
+            <div className="card">
+                <h3>{card.title}</h3>
+                <p>{card.text}</p>
+            </div>
+        );
+
+        // Render the App
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
