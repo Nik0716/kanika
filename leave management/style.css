@@ -1,0 +1,155 @@
+/* Responsive Breakpoints */
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+    flex-direction: row;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* Color Variables */
+:root {
+  --primary-bg: #F5F5F5;
+  --secondary-bg: #E6E6E6;
+  --button-color: #003366;
+  --button-hover-color: #002244;
+  --form-bg: #ffffff;
+  --line-color: rgba(0, 0, 0, 0.1);
+  --input-focus-border: #003366;
+}
+
+/* Base Layout Adjustments */
+body {
+  background-color: var(--primary-bg);
+  font-family: 'Arial', sans-serif;
+  font-size: 15px;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--form-bg);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+ .graphics {
+  width: 100%;
+  height: 20vh;
+  background-color: var(--secondary-bg);
+  margin-bottom: 20px;
+}
+
+@media (min-width: 992px) {
+  .graphics {
+    width: 400px;
+    height: 100vh;
+  }
+} 
+
+/* Form Container Styling */
+.form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--form-bg);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styling */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.form-control {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  font-size: 14px;
+  background-color: var(--secondary-bg);
+  border: 1px solid var(--line-color);
+  border-radius: 5px;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  border-color: var(--input-focus-border);
+  outline: none;
+  background-color: #fff;
+}
+
+/* Checkbox Styling */
+.form-check {
+  display: flex;
+  align-items: center;
+}
+
+.form-check-input {
+  margin-right: 10px;
+}
+
+.form-check-label {
+  font-size: 14px;
+}
+
+/* Button Styling */
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.form-button, .form-reset {
+  height: 45px;
+  padding: 0 20px;
+  font-size: 14px;
+  color: #fff;
+  background-color: var(--button-color);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+}
+
+.form-button:hover {
+  background-color: var(--button-hover-color);
+}
+
+.form-reset {
+  background-color: transparent;
+  color: #333;
+  margin-right: 10px;
+}
+
+.form-reset:hover {
+  color: var(--button-hover-color);
+}
+
+
